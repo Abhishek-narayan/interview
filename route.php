@@ -2,7 +2,7 @@
 
 	$urlInfo 	= (object) pathinfo($_SERVER['PHP_SELF']);
 
-	$url  		= str_replace('/index.php','', $urlInfo->dirname);
+	$url  		= strstr($urlInfo->dirname,'index.php');
 
 	if(($url=='' || $url =='/') && $urlInfo->basename == 'index.php'){
 
@@ -15,47 +15,19 @@
 	}
 	else{
 
-		$parseUrl = explode('/', trim($_SERVER['PHP_SELF'],'/'));
+		$parseUrl = explode('/', trim(strstr($_SERVER['PHP_SELF'],'index.php'),'/'));
 
-		$indexPos = strpos($_SERVER['PHP_SELF'],'index.php');
+		$controller = $parseUrl[1];
 
-		if($indexPos){
-
-
-			$controller = $parseUrl[1];
-
-			if(!empty($parseUrl[2])){
-				$method     = $parseUrl[2] ;
-			}
-			else{
-				$method     = 'index';
-			}
-
-			array_splice($parseUrl,0,3);
-
-			if(!empty($parseUrl[0])){
-				$param 	    = $parseUrl;
-			}
-			else{
-				$param 	    = array();
-			}
-
+		if(!empty($parseUrl[2])){
+			$method     = $parseUrl[2] ;
 		}
 		else{
-
-			$controller = $parseUrl[0];
-
-			if(!empty($parseUrl[1])){
-				$method     = $parseUrl[1] ;
-			}
-			else{
-				$method     = 'index';
-			}
-
-			array_splice($parseUrl,0,2);
-
-			$param 	    = $parseUrl;
-			
+			$method     = 'index';
 		}
+
+		array_splice($parseUrl,0,3);
+
+		$param 	    = $parseUrl;
 		
 	}
